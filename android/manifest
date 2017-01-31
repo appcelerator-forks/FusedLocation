@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.2
+apiversion: 3
+architectures: armeabi-v7a x86
+description: Android FusedLocation Module for Titanium (Min SDK 6.1.0)
+author: Underlabs Inc.
+license: Open Sourced
+copyright: Copyright (c) 2017 by Underlabs
+
+# these should not be edited
+name: fusedlocation
+moduleid: ca.underlabs.fusedlocation
+guid: 970ca84e-345d-4a69-be92-634807388631
+platform: android
+minsdk: 6.1.0

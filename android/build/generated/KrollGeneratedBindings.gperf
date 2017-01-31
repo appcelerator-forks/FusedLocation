@@ -1,0 +1,16 @@
+%define lookup-function-name lookupGeneratedInit
+%define class-name FusedlocationModuleBindings
+%{
+
+#include <string.h>
+#include <v8.h>
+#include <KrollBindings.h>
+
+#include "ca.underlabs.fusedlocation.FusedlocationModule.h"
+
+
+%}
+struct titanium::bindings::BindEntry;
+%%
+ca.underlabs.fusedlocation.FusedlocationModule,::ca::underlabs::fusedlocation::FusedlocationModule::bindProxy,::ca::underlabs::fusedlocation::FusedlocationModule::dispose
+%%

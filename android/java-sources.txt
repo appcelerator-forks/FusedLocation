@@ -1,0 +1,3 @@
+"/Users/theFool/Documents/Appcelerator_Studio_Workspace/fusedlocation/android/build/generated/java/ca/underlabs/fusedlocation/FusedlocationModuleBootstrap.java"
+"/Users/theFool/Documents/Appcelerator_Studio_Workspace/fusedlocation/android/src/ca/underlabs/fusedlocation/FusedlocationBootstrap.java"
+"/Users/theFool/Documents/Appcelerator_Studio_Workspace/fusedlocation/android/src/ca/underlabs/fusedlocation/FusedlocationModule.java"
