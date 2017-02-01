@@ -34,17 +34,16 @@ var FusedLocation = require('ca.underlabs.fusedlocation');
 var FusedLocation = require('ca.underlabs.fusedlocation');
 
 GoogleApiClient.startGeoLocation({
-success: function(e) {
-// returns similar to iOS location event: 
-// {"type":"location","success":true,"provider":"fused",
-//      "coords":{"bearing":0,"latitude":40.4688283,"timestamp":1486002223000,"speed":0,"accuracy":1,"longitude":-72.74637}}
-Ti.API.info(JSON.stringify(e)); 
-},
-error: function(e) {
-Ti.API.info('Android GeoLocation Fusion Error :(');
-$.label.text = 'Nay';
-Ti.API.info(JSON.stringify(e));
-}
+    success: function(e) {
+        // returns similar to iOS location event: 
+        // {"type":"location","success":true,"provider":"fused",
+        //      "coords":{"bearing":0,"latitude":40.4688283,"timestamp":1486002223000,"speed":0,"accuracy":1,"longitude":-72.74637}}
+    Ti.API.info(JSON.stringify(e)); 
+    },
+    error: function(e) {
+        Ti.API.info('Android GeoLocation Fusion Error :(');
+        Ti.API.info(JSON.stringify(e));
+    }
 });
 
 ```
