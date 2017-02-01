@@ -24,18 +24,37 @@ Edit the modules section of your `tiapp.xml` file to include this module:
 </modules>
 ```
 
-If you are using FusedLocation with ti.map. Make sure to delete in ca.underlabs.fusedlocation/1.2.1/lib/ these 2 jars: 
-- classes-base.jar and 
-- classes-basement.jar 
-since they’re already in ti.map, and just leave classes.jar (which has com.google.android.gms.location)
+Features
+--------
+#### Start Location (location updates event)
 
-### Build
-If you want to build the module from the source, you need to check some things beforehand:
-- You'll need all three .jar files in your build path
-- With Ti >= 6.1.0, use within android folder `appc run --build-only`
+```javascript
+var FusedLocation = require('ca.underlabs.fusedlocation');
 
-Defaults
----------
+var FusedLocation = require('ca.underlabs.fusedlocation');
+
+GoogleApiClient.startGeoLocation({
+success: function(e) {
+// returns similar to iOS location event: 
+// {"type":"location","success":true,"provider":"fused",
+//      "coords":{"bearing":0,"latitude":40.4688283,"timestamp":1486002223000,"speed":0,"accuracy":1,"longitude":-72.74637}}
+Ti.API.info(JSON.stringify(e)); 
+},
+error: function(e) {
+Ti.API.info('Android GeoLocation Fusion Error :(');
+$.label.text = 'Nay';
+Ti.API.info(JSON.stringify(e));
+}
+});
+
+```
+
+#### Stop Location (save on battery consumption when not needed)
+```javascript
+GoogleApiClient.stopGeoLocation();
+```
+
+### Defaults
 By Default in the code (hardcoded - pull requests welcomed):
 - PRIORITY is set to 100 (meaning GPS - Most Accurate)
 - DISTANCE_FILTER is set to 5 meters (location event updates when accelerometers senses that 5 meters have been traversed)
@@ -44,32 +63,25 @@ If Distance Filter is triggered (example driving very fast), below are handled b
 - FASTEST_UPDATE_FREQ is set to 1 second (every 1 sec at fastest)
 - INTERVAL is set to 5 second (at latest)
 
+
+Usage with ti.map
+------------------
+Make sure to delete in `/1.2.1/lib/` these 2 jars: 
+- `classes-base.jar` and 
+- `classes-basement.jar`
+
+Since they’re already in ti.map, and just leave `classes.jar` (which holds com.google.android.gms.location)
+
+### Build
+If you want to build the module from the source, you need to check some things beforehand:
+- You'll need all three .jar files in your build path
+- With Ti >= 6.1.0, use within android folder `appc run --build-only`
+
+
 TODO: These are Hardcoded - PullRequests are Welcomed, and I will try to update it so that these can be passed from Ti App part of `startGeoLocation`.
 
-Features
---------------------------------
-#### Location Updates
-
-```javascript
-var FusedLocation = require('ca.underlabs.fusedlocation');
-	
-	GoogleApiClient.startGeoLocation({
-		success: function(e) {
-			// returns similar to iOS location event: 
-			// {"type":"location","success":true,"provider":"fused",
-			//		"coords":{"bearing":0,"latitude":40.4688283,"timestamp":1486002223000,"speed":0,"accuracy":1,"longitude":-72.74637}}
-			Ti.API.info(JSON.stringify(e)); 
-		},
-		error: function(e) {
-			Ti.API.info('Android GeoLocation Fusion Error :(');
-			$.label.text = 'Nay';
-			Ti.API.info(JSON.stringify(e));
-		}
-	});
-```
-
 #### TODO
-[] Allow params to be passed to `startGeoLocation` for: Priority, DistanceFilter, FastestUpdateFrequency and Interval
+[ ] Allow params to be passed to `startGeoLocation` for: `priority`, `distanceFilter`, `fastestInterval` and `interval`
 
 Contributing
 ---------------
