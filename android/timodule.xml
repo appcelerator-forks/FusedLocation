@@ -15,7 +15,7 @@
                <application>
                   <meta-data
  	                 android:name="com.google.android.gms.version"
- 	                 android:value="8487000"/>
+ 	                 android:value="9683000"/>
                </application>
             </manifest>
 	</android>

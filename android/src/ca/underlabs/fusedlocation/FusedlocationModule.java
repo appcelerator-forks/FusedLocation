@@ -33,12 +33,13 @@ public class FusedlocationModule extends KrollModule implements LocationListener
 	
 	private KrollFunction geoLocationSuccessCallback;
     private KrollFunction geoLocationErrorCallback;
-    private String lastLatitude = "";
-    private String lastLongitude = "";
-    private String lastAccuracy = "";
-    private final int PRIORITY = 100;
-    private final long POLLING_FREQ = 3000;
-    private final long FASTEST_UPDATE_FREQ = 16;
+    private Double lastLatitude = new Double("0");;
+    private Double lastLongitude = new Double("0");;
+    private float lastAccuracy = 0;
+    private final int PRIORITY = 100; // 100 = most accurate locations available (GPS) | 104 = "city" level accuracy (10km Wifi & Cell) | 105 = best accuracy possible with zero additional power consumption
+    private final long POLLING_FREQ = 5000; // Every second (at most)
+    private final long FASTEST_UPDATE_FREQ = 1000; // 1 seconds at fastest
+    private float DISTANCE_FILTER = 5; // in meters
     
     Context ctx = TiApplication.getAppCurrentActivity().getApplicationContext();
     
@@ -49,7 +50,7 @@ public class FusedlocationModule extends KrollModule implements LocationListener
 
     @Kroll.onAppCreate
     public static void onAppCreate(TiApplication app) {
-        Log.d(LCAT, "inside onAppCreate");
+        Log.d(LCAT, "onAppCreate");
     }
 
     public void onStart(Activity activity) {
@@ -74,13 +75,14 @@ public class FusedlocationModule extends KrollModule implements LocationListener
     public void onLocationChanged(Location location) {
         if (location != null) {
             Boolean execCallback = false;
-            String latitude = String.valueOf(location.getLatitude());
-            String longitude = String.valueOf(location.getLongitude());
-            String accuracy = String.valueOf(location.getAccuracy());
+            Double latitude = location.getLatitude();
+            Double longitude = location.getLongitude();
+            float accuracy = location.getAccuracy();
             String provider = String.valueOf(location.getProvider());
-            String bearing = String.valueOf(location.getBearing());
-            String speed = String.valueOf(location.getSpeed());
-            String timestamp = String.valueOf(location.getTime());
+            float bearing = location.getBearing();
+            float speed = location.getSpeed();
+            long timestamp = location.getTime();
+            
             if (!this.lastLatitude.equals(latitude)) {
                 this.lastLatitude = latitude;
                 execCallback = true;
@@ -89,20 +91,32 @@ public class FusedlocationModule extends KrollModule implements LocationListener
                 this.lastLongitude = longitude;
                 execCallback = true;
             }
-            if (!this.lastAccuracy.equals(accuracy)) {
+            if (this.lastAccuracy != accuracy) {
                 this.lastAccuracy = accuracy;
                 execCallback = true;
             }
+            
             if (execCallback.booleanValue()) {
-                HashMap<String, String> event = new HashMap<String, String>();
-                event.put("latitude", latitude);
-                event.put("longitude", longitude);
-                event.put("accuracy", accuracy);
-                event.put("provider", provider);
-                event.put("bearing", bearing);
-                event.put("speed", speed);
-                event.put("timestamp", timestamp);
-                this.geoLocationSuccessCallback.call(this.getKrollObject(), event);
+                
+                KrollDict locationObj = new KrollDict();
+                locationObj.put("latitude", latitude);
+                locationObj.put("longitude", longitude);
+                locationObj.put("accuracy", accuracy);
+                locationObj.put("bearing", bearing);
+                locationObj.put("speed", speed);
+                locationObj.put("timestamp", timestamp);
+                
+                // mimic obj structure of iOS location event
+                KrollDict coords = new KrollDict();
+                coords.put("coords", locationObj);
+                coords.put("provider", provider);
+                coords.put("success", true);
+                coords.put("type", "location");
+                
+                if (geoLocationSuccessCallback != null)  {
+                		this.geoLocationSuccessCallback.call(getKrollObject(), coords);
+                }
+                
             }
         }
     }
@@ -119,9 +133,11 @@ public class FusedlocationModule extends KrollModule implements LocationListener
     		ctx = TiApplication.getAppRootOrCurrentActivity().getApplicationContext();
         Log.d(LCAT, "buildClient");
         locationRequest = LocationRequest.create();
+        // More Info: https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest
         locationRequest.setPriority(PRIORITY);
         locationRequest.setInterval(POLLING_FREQ);
         locationRequest.setFastestInterval(FASTEST_UPDATE_FREQ);
+        locationRequest.setSmallestDisplacement(DISTANCE_FILTER);
         Activity activity = TiApplication.getAppCurrentActivity();
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder((Context)activity).addApi(LocationServices.API).addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks)this).addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener)this);
         googleApiClient = builder.build();
@@ -138,7 +154,7 @@ public class FusedlocationModule extends KrollModule implements LocationListener
             this.geoLocationErrorCallback = (KrollFunction)props.get((Object)"error");
         }
         if (googleApiClient == null) {
-            this.buildClient();
+            this.buildClient(); // create location Request
         } else {
             Log.d(LCAT, "GoogleApiClient available");
         }

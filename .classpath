@@ -12,6 +12,8 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="android/lib/google-play-services-light.jar"/>
+	<classpathentry kind="lib" path="android/lib/classes.jar"/>
+	<classpathentry kind="lib" path="android/lib/classes-base.jar"/>
+	<classpathentry kind="lib" path="android/lib/classes-basement.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

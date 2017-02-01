@@ -1,50 +1,48 @@
-Ti FusedLocation for Android (dosen't work with Ti.Map)
-============================
-
+Titanium Android Module: FusedLocation for Android
+==================================================
 This is a Titanium Android module to take advantage of FusedLocation. Location Updates faster, and much better on battery drainage.
 
 
-ISSUES WITH OTHER Android Modules like (ti.map)
------------------------------------------------
-Running FusedLocation with ti.map will throw errors:
-[ERROR] :  Failed to run dexer:
-[ERROR] :  
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/internal/zzrn;
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/internal/zzro;
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/internal/zzrl;
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/internal/zzsv;
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/internal/zzsu;
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/internal/zzrm;
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/common/zze;
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/common/zzc;
-[ERROR] :  Uncaught translation error: java.lang.IllegalArgumentException: already added: Lcom/google/android/gms/common/ConnectionResult;
+Important to Note when used with other Android Modules like (ti.map)
+--------------------------------------------------------------------
+If you are using FusedLocation with ti.map. Make sure to delete in ca.underlabs.fusedlocation/1.2.1/lib/ these 2 jars: 
+- classes-base.jar and 
+- classes-basement.jar 
+since they’re already in ti.map, and just leave classes.jar (which has com.google.android.gms.location)
 
-Trying to find a solution.
+When Compiling the Module, you'll need all three in your build path.
 
+Default Geolocation Updates:
+----------------------------
+By Default in the code (hardcoded - pull requests welcomed):
+- PRIORITY is set to 100 (meaning GPS - Most Accurate)
+- DISTANCE_FILTER is set to 5 meters (location event updates when accelerometers senses that 5 meters have been traversed)
 
-REGISTER YOUR MODULE
---------------------
+If Distance Filter is triggered (example driving very fast), below are handled by:
+- FASTEST_UPDATE_FREQ is set to 1 second (every 1 sec at fastest)
+- INTERVAL is set to 5 second (at latest)
+
+TODO: These are Hardcoded - PullRequests are Welcomed, and I will try to update it so that these can be passed from Ti App part of `startGeoLocation`.
+
+Usage:
+------
 
 Register your module with your application by editing `tiapp.xml` and adding your module.
-Example:
 
 <modules>
-	<module version="1.2">ca.underlabs.fusedlocation</module>
+	<module version="1.2.2">ca.underlabs.fusedlocation</module>
 </modules>
 
-
-USING  MODULE IN CODE
----------------------
-
 To use the module in code, you will need to require it.
-
+`
 	var FusedLocation = require('ca.underlabs.fusedlocation');
 	
 	GoogleApiClient.startGeoLocation({
 		success: function(e) {
-			Ti.API.info('Android GeoLocation Fusion Worked! :) **');
-			$.label.text = 'latitude: ' + e.latitude;
-			Ti.API.info(JSON.stringify(e));
+			// returns similar to iOS location event: 
+			// {"type":"location","success":true,"provider":"fused",
+			//		"coords":{"bearing":0,"latitude":40.4688283,"timestamp":1486002223000,"speed":0,"accuracy":1,"longitude":-72.74637}}
+			Ti.API.info(JSON.stringify(e)); 
 		},
 		error: function(e) {
 			Ti.API.info('Android GeoLocation Fusion Error :(');
@@ -54,4 +52,4 @@ To use the module in code, you will need to require it.
 	});
 	
 	GoogleApiClient.stopGeoLocation(); // Don't forget to stop it when not needed.
-
+`

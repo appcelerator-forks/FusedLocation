@@ -2,7 +2,7 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.2
+version: 1.2.2
 apiversion: 3
 architectures: armeabi-v7a x86
 description: Android FusedLocation Module for Titanium (Min SDK 6.1.0)
