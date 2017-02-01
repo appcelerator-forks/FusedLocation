@@ -1,2 +1,1 @@
-You can place any .jar dependencies in this directory and they will be included
-when your module is being compiled.
+If you use ti.map, you must remove classes-base.jar and classes-basement.jar

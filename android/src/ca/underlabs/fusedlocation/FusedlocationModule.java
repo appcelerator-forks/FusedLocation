@@ -102,7 +102,7 @@ public class FusedlocationModule extends KrollModule implements LocationListener
                 locationObj.put("latitude", latitude);
                 locationObj.put("longitude", longitude);
                 locationObj.put("accuracy", accuracy);
-                locationObj.put("bearing", bearing);
+                locationObj.put("heading", bearing);
                 locationObj.put("speed", speed);
                 locationObj.put("timestamp", timestamp);
                 
