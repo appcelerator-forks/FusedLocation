@@ -1,19 +1,41 @@
-Titanium Android Module: FusedLocation for Android
-==================================================
-This is a Titanium Android module to take advantage of FusedLocation. Location Updates faster, and much better on battery drainage.
+# Titanium Android FusedLocation 
 
+ Summary
+---------------
+FusedLocation is an open-source project to support the Android's new LocationRequest in Appcelerator's Titanium Mobile.
 
-Important to Note when used with other Android Modules like (ti.map)
---------------------------------------------------------------------
+Requirements
+---------------
+  - Titanium Mobile SDK 6.1.0.GA or later
+  - Android 2.3 or later
+
+Download + Setup
+---------------
+
+### Download
+  * [Stable release](https://github.com/yozef/FusedLocation/releases)
+
+### Setup
+Unpack the module and place it inside the `modules/android/` folder of your project.
+Edit the modules section of your `tiapp.xml` file to include this module:
+```xml
+<modules>
+    <module platform="android">ca.underlabs.fusedlocation</module>
+</modules>
+```
+
 If you are using FusedLocation with ti.map. Make sure to delete in ca.underlabs.fusedlocation/1.2.1/lib/ these 2 jars: 
 - classes-base.jar and 
 - classes-basement.jar 
 since they’re already in ti.map, and just leave classes.jar (which has com.google.android.gms.location)
 
-When Compiling the Module, you'll need all three in your build path.
+### Build
+If you want to build the module from the source, you need to check some things beforehand:
+- You'll need all three .jar files in your build path
+- With Ti >= 6.1.0, use within android folder `appc run --build-only`
 
-Default Geolocation Updates:
-----------------------------
+Defaults
+---------
 By Default in the code (hardcoded - pull requests welcomed):
 - PRIORITY is set to 100 (meaning GPS - Most Accurate)
 - DISTANCE_FILTER is set to 5 meters (location event updates when accelerometers senses that 5 meters have been traversed)
@@ -24,18 +46,12 @@ If Distance Filter is triggered (example driving very fast), below are handled b
 
 TODO: These are Hardcoded - PullRequests are Welcomed, and I will try to update it so that these can be passed from Ti App part of `startGeoLocation`.
 
-Usage:
-------
+Features
+--------------------------------
+#### Location Updates
 
-Register your module with your application by editing `tiapp.xml` and adding your module.
-
-<modules>
-	<module version="1.2.2">ca.underlabs.fusedlocation</module>
-</modules>
-
-To use the module in code, you will need to require it.
-`
-	var FusedLocation = require('ca.underlabs.fusedlocation');
+```javascript
+var FusedLocation = require('ca.underlabs.fusedlocation');
 	
 	GoogleApiClient.startGeoLocation({
 		success: function(e) {
@@ -50,6 +66,11 @@ To use the module in code, you will need to require it.
 			Ti.API.info(JSON.stringify(e));
 		}
 	});
-	
-	GoogleApiClient.stopGeoLocation(); // Don't forget to stop it when not needed.
-`
+```
+
+#### TODO
+[] Allow params to be passed to `startGeoLocation` for: Priority, DistanceFilter, FastestUpdateFrequency and Interval
+
+Contributing
+---------------
+Code contributions are greatly appreciated, please submit a new pull request!
