@@ -6,7 +6,7 @@ FusedLocation is an open-source project to support the Android's new LocationReq
 
 Requirements
 ---------------
-  - Titanium Mobile SDK 6.1.0.GA or later
+  - Titanium Mobile SDK 6.0.0.GA or later
   - Android 2.3 or later
 
 Download + Setup
@@ -31,7 +31,7 @@ Features
 ```javascript
 var FusedLocation = require('ca.underlabs.fusedlocation');
 
-GoogleApiClient.startGeoLocation({
+FusedLocation.startGeoLocation({
     success: function(e) {
         // returns similar to iOS location event: 
         // {"type":"location","success":true,"provider":"fused",
@@ -49,7 +49,7 @@ GoogleApiClient.startGeoLocation({
 
 #### Stop Location (save on battery consumption when not needed)
 ```javascript
-GoogleApiClient.stopGeoLocation();
+FusedLocation.stopGeoLocation();
 ```
 
 ### Defaults
@@ -64,7 +64,7 @@ If Distance Filter is triggered (example driving very fast), below are handled b
 
 Usage with ti.map
 ------------------
-Make sure to delete in `/1.2.1/lib/` these 2 jars: 
+Make sure to delete in `/1.2.2/lib/` these 2 jars: 
 - `classes-base.jar` and 
 - `classes-basement.jar`
 
@@ -73,7 +73,7 @@ Since they’re already in ti.map, and just leave `classes.jar` (which holds com
 ### Build
 If you want to build the module from the source, you need to check some things beforehand:
 - You'll need all three .jar files in your build path
-- With Ti >= 6.1.0, use within android folder `appc run --build-only`
+- With Ti >= 6.0.0, use within android folder `appc run --build-only`
 
 
 TODO: These are Hardcoded - PullRequests are Welcomed, and I will try to update it so that these can be passed from Ti App part of `startGeoLocation`.
